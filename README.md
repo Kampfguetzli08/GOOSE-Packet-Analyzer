@@ -1,3 +1,3 @@
 # GOOSE Packet Analyzer
 
-Analyzes PCAP Files and detect Anomalies
+Analyzes PCAP Files and detect GOOSE Anomalies
