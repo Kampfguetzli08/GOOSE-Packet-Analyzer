@@ -1,8 +1,8 @@
 import argparse
-import json
 from scapy.all import *
 from lib.goose_filter import *
 from lib.goose_analyzer import *
+from lib.generate_report import *
 
 
 def readpcap(filepath):
@@ -25,9 +25,12 @@ def main():
 
     gps = readpcap(args.file)
 
-    results = json.dumps(analyze_goose_packets(gps))
+    results = analyze_goose_packets(gps)
 
-    print(results)
+    report = generate_report(results)
+
+    with open('report.html', 'w') as rf:
+        rf.write(report)
 
 
 if __name__ == '__main__':
