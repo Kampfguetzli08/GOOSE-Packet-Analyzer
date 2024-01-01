@@ -6,30 +6,6 @@ from scapy.all import *
 from scapy.fields import XShortField, XByteField, ConditionalField
 
 
-def unpack_varint(data, length):
-    if length == 1:
-        data = struct.unpack('!b', data)[0]
-    elif length == 2:
-        data = struct.unpack('!h', data)[0]
-    elif length == 4:
-        data = struct.unpack('!i', data)[0]
-    else:
-        data = -1
-    return data
-
-
-def unpack_uvarint(data, length):
-    if length == 1:
-        data = struct.unpack('!B', data)[0]
-    elif length == 2:
-        data = struct.unpack('!H', data)[0]
-    elif length == 4:
-        data = struct.unpack('!I', data)[0]
-    else:
-        data = -1
-    return data
-
-
 class ASNType(object):
     tag = ''
 
@@ -51,7 +27,7 @@ class ASNType(object):
 
 class Integer(ASNType):
     def __init__(self, data='', length=0):
-        self.data = unpack_varint(data, length)
+        self.data = int.from_bytes(data, signed=True)
 
     def __repr__(self):
         return self.data
@@ -96,7 +72,7 @@ class UTCTime(ASNType):
 
 class UnsignedInteger(ASNType):
     def __init__(self, data='', length=0):
-        self.data = unpack_uvarint(data, length)
+        self.data = int.from_bytes(data, signed=False)
 
     def __repr__(self):
         return self.data

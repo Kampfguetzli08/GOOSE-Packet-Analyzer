@@ -48,9 +48,15 @@ def analyze_goose_packets(igpks):
                         )
 
                 elif packet['stnum'] == prev_pkt['stnum'] + 1:
-                    warnings.append(
-                        'Event occured at packet %i' % (packet['pktnr'])
-                    )
+                    if packet['sqnum'] == 0:
+                        warnings.append(
+                            'Event occurred at packet %i' % (packet['pktnr'])
+                        )
+                    else:
+                        warnings.append(
+                            'sqNum (%i) is out of order (expected %i) between packets %i and %i' %
+                            (packet['sqnum'], 0, prev_pkt['pktnr'], packet['pktnr'])
+                        )
 
                 else:
                     warnings.append(

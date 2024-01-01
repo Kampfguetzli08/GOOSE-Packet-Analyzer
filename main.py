@@ -3,7 +3,7 @@ from scapy.all import *
 from lib.goose_filter import *
 from lib.goose_analyzer import *
 from lib.generate_report import *
-
+import time
 
 def readpcap(filepath):
     pcap = rdpcap(filepath)

@@ -51,21 +51,12 @@ def filter_goose_packets(pcap):
             gpkt = GOOSE(pkt.load)
             gpdu_raw = gpkt.load
 
-            # this is maybe wrong implemented
-            # as far as i know the goosePDU starts with the value 0x61
-            # then follows a 'special' byte which i'm not sure how it exactly works
-            # if it's under 0x80 this byte is the length of the goosePDU payload
-            # if it's bigger than that (i've only seen 0x81 until now), i think
-            # you get the number of bytes with the corresponding length if you xor the
-            # value with 0x80, so 0x81 would be 1 byte and 0x82 2 bytes.
-            # more shouldn't be necessary because of the ethernet packet size limitation
-            #
-            # tldr; if the value of the second byte is smaller than 0x80 shift 2 bytes
-            # if it's bigger shift it for 3 or more bytes depending on the xor operation
+            # if the value of the second byte is smaller than 0x80 shift 2 bytes
+            # if it's bigger, shift it for 3 or more bytes depending on the and-operation
             if gpdu_raw[1] < 0x80:
                 byteshift = 2
             else:
-                byteshift = (gpdu_raw[1] ^ 0x80) + 2
+                byteshift = (gpdu_raw[1] & 0x7F) + 2
 
             gd = decoder(gpdu_raw[byteshift:], GOOSEPDU.tagmap)
 
